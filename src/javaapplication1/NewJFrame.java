@@ -12,11 +12,11 @@ import java.awt.event.*;
  * @author Ben
  */
 public class NewJFrame extends javax.swing.JFrame {
-    private JFrame frame = new JFrame("Login");
+    //private JFrame frame = new JFrame("Login");
     
     public NewJFrame() {
         initComponents();
-        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
     /**
