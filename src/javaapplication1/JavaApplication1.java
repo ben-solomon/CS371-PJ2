@@ -4,15 +4,18 @@
  * and open the template in the editor.
  */
 package javaapplication1;
-import javax.swing.*;
-import java.awt.event.*;
+
 /**
  *
- * @author Ben
+ * @author Admin
  */
-public class Main {
-    NewJFrame loginFrame = new NewJFrame();
-    DBHandler db = new DBHandler();
+public class JavaApplication1 {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        DBHandler db = new DBHandler();
+    }
     
 }
-
