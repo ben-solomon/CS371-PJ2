@@ -4,16 +4,18 @@
  * and open the template in the editor.
  */
 package javaapplication1;
+
 /**
  *
- * @author Ben
+ * @author Admin
  */
-public class Main {
-    public static void main(String[] args) {
-    NewJFrame loginFrame = new NewJFrame();
-    loginFrame.setVisible(true);
-    DBHandler db = new DBHandler();
-    }
+public class JavaApplication1 {
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        DBHandler db = new DBHandler();
+    }
+    
 }
- 
