@@ -53,7 +53,7 @@ public class DBHandler {
      Statement query = st;
       if (!moderator.contains(" ")){
           try {
-              String sql = "SELECT * FROM users WHERE User_ID='"+ moderator +"'"; 
+              String sql = "SELECT * FROM moderators WHERE User_ID='"+ moderator +"'"; 
               ResultSet rs = query.executeQuery(sql);
               return rs.next();
           } catch (SQLException ex) {
