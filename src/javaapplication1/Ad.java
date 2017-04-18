@@ -73,7 +73,7 @@ public class Ad {
     }
     public String getStatus(){
         
-        return this.adCategory;
+        return this.adStatus;
     }
     public String getCategory(){
        if (this.adCategory == null ? ELECTRONICS == null : this.adCategory.equals(ELECTRONICS)){
