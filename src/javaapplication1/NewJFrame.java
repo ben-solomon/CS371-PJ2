@@ -11,9 +11,11 @@ import javax.swing.*;
  * @author Ben
  */
 public class NewJFrame extends javax.swing.JFrame {
+    private DBHandler db;
     //private JFrame frame = new JFrame("Login");
     
-    public NewJFrame() {
+    public NewJFrame(DBHandler db) {
+        this.db = db;
         initComponents();
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
@@ -30,7 +32,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        loginTextBox = new javax.swing.JTextField();
         LoginButton = new javax.swing.JButton();
         loginDropDown = new javax.swing.JComboBox<>();
 
@@ -68,7 +70,7 @@ public class NewJFrame extends javax.swing.JFrame {
                                     .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jTextField1)
+                                    .addComponent(loginTextBox)
                                     .addComponent(loginDropDown, 0, 120, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(156, 156, 156)
@@ -83,7 +85,7 @@ public class NewJFrame extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(loginTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -97,14 +99,24 @@ public class NewJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
-        if (loginDropDown.getSelectedItem() == "User"){
-            MainForm form = new MainForm();
+        String userType = loginDropDown.getSelectedItem().toString();
+        String userName = loginTextBox.getText();
+        if (userType.equals("User")){
+            if(db.checkUser(userName)){
+               MainForm form = new MainForm(db,userName);
+               dispose();
+            }
+            
         }
         else{
-            Moderator form = new Moderator();
+            if(db.checkModerator(userName)){
+            Moderator form = new Moderator(db,userName);
+            dispose();
+            }
+            
         }
         
-        dispose();
+        
     }//GEN-LAST:event_LoginButtonActionPerformed
 
     /**
@@ -137,7 +149,6 @@ public class NewJFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
             }
         });
     }
@@ -147,7 +158,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JComboBox<String> loginDropDown;
+    private javax.swing.JTextField loginTextBox;
     // End of variables declaration//GEN-END:variables
 }

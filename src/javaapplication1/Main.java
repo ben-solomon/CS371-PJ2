@@ -10,9 +10,10 @@ package javaapplication1;
  */
 public class Main {
     public static void main(String[] args) {
-    NewJFrame loginFrame = new NewJFrame();
-    loginFrame.setVisible(true);
     DBHandler db = new DBHandler();
+    NewJFrame loginFrame = new NewJFrame(db);
+    loginFrame.setVisible(true);
+    
     }
 
 }
