@@ -5,19 +5,23 @@
  */
 package javaapplication1;
 
+import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 
 public class Moderator extends javax.swing.JFrame {
     private DBHandler db;
     private String currentUser;
-
+    public String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created By","Moderated By","Category"};
     public Moderator(DBHandler db, String username) {
         this.currentUser = username;
         this.db = db;
         initComponents();
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        this.fillModAds(unclaimedAds);
     }
 
     @SuppressWarnings("unchecked")
@@ -34,18 +38,20 @@ public class Moderator extends javax.swing.JFrame {
         titlesearch = new javax.swing.JTextField();
         gobutton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        unclaimedAds = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        modmyAds = new javax.swing.JTable();
         SearchText = new javax.swing.JTextField();
         jComboBox4 = new javax.swing.JComboBox<>();
         jComboBox3 = new javax.swing.JComboBox<>();
         logoutButton = new javax.swing.JButton();
+        claimAdButton = new javax.swing.JButton();
+        NewAdButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,7 +67,7 @@ public class Moderator extends javax.swing.JFrame {
 
         gobutton.setText("GO");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        unclaimedAds.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -72,7 +78,7 @@ public class Moderator extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(unclaimedAds);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -81,7 +87,7 @@ public class Moderator extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -133,7 +139,7 @@ public class Moderator extends javax.swing.JFrame {
 
         jButton1.setText("GO");
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        modmyAds.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -144,7 +150,7 @@ public class Moderator extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(modmyAds);
 
         jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
@@ -203,6 +209,10 @@ public class Moderator extends javax.swing.JFrame {
             }
         });
 
+        claimAdButton.setText("Claim Ad");
+
+        NewAdButton.setText("New Ad");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -210,16 +220,24 @@ public class Moderator extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTabbedPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTabbedPane1)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(logoutButton)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(claimAdButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(NewAdButton)
+                        .addGap(28, 28, 28))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(logoutButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(logoutButton)
+                    .addComponent(claimAdButton)
+                    .addComponent(NewAdButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -233,7 +251,28 @@ public class Moderator extends javax.swing.JFrame {
         NewJFrame back = new NewJFrame(db);
         back.setVisible(true);
     }//GEN-LAST:event_logoutButtonActionPerformed
-
+private void fillModAds (JTable jtable){
+        
+        ArrayList<Ad> list = db.getPendingAds();
+        unclaimedAds.setModel(new DefaultTableModel(arrayToAd(list),col));
+    }
+ // Turns list of Ad objects into 2D String array
+   private String[] [] arrayToAd(ArrayList<Ad> list){
+       String[][] ret = new String[list.size()][8];
+       int i = 0;
+       for (Ad j:list){
+           ret[i][0] = Integer.toString(j.getID());
+           ret[i][1] = j.getTitle();
+           ret[i][2] = j.getDetails();
+           ret[i][3] = j.getDate();
+           ret[i][4] = j.getPrice();
+           ret[i][5] = j.getUser();
+           ret[i][6] = j.getModerator();
+           ret[i][7] = j.getCategory();
+           i+=1;
+       }
+       return ret;
+   }
     /**
      * @param args the command line arguments
      */
@@ -269,7 +308,9 @@ public class Moderator extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton NewAdButton;
     private javax.swing.JTextField SearchText;
+    private javax.swing.JButton claimAdButton;
     private javax.swing.JButton gobutton;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -287,9 +328,9 @@ public class Moderator extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JButton logoutButton;
+    private javax.swing.JTable modmyAds;
     private javax.swing.JTextField titlesearch;
+    private javax.swing.JTable unclaimedAds;
     // End of variables declaration//GEN-END:variables
 }

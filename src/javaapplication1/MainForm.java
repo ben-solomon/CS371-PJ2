@@ -95,6 +95,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         });
 
         periodDDL.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        periodDDL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                periodDDLActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Search Title/Description");
 
@@ -326,6 +331,10 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     private void categoryDDLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryDDLActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_categoryDDLActionPerformed
+
+    private void periodDDLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_periodDDLActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_periodDDLActionPerformed
     
     /**
      * @param args the command line arguments
