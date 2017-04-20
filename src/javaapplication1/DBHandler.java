@@ -24,7 +24,7 @@ public class DBHandler {
 DBHandler(){
     try{
         Class.forName("com.mysql.jdbc.Driver");
-        dbc = DriverManager.getConnection("jdbc:mysql://localhost:3306/project2","root","tru$tn01");
+        dbc = DriverManager.getConnection("jdbc:mysql://localhost:3306/cs371","root","root");
         st = dbc.createStatement();
         System.out.println("conn. success!");
         
@@ -103,6 +103,26 @@ public ArrayList<Ad> getAllActiveAds(){
       }
       return null;
 }
+public ArrayList<Ad> getPendingAds(){
+      try {
+          ArrayList<Ad> allAds = new ArrayList();
+          Statement query = st;
+          String sql = "SELECT * FROM advertisements WHERE Status_ID='PN'";
+          ResultSet rs = query.executeQuery(sql);
+          while(rs.next()){
+              Ad temp = new Ad();
+              temp.setAll(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9));
+               allAds.add(temp);
+          }
+          return allAds;
+          
+      } catch (SQLException ex) {
+          Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return null;
+}
+
+
 // Method to get ads based on time and category selected
    public ArrayList<Ad> getCustomAds(String period,String category){
        try {
