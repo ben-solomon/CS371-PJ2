@@ -211,7 +211,12 @@ public class Moderator extends javax.swing.JFrame {
 
         claimAdButton.setText("Claim Ad");
 
-        NewAdButton.setText("New Ad");
+        NewAdButton.setText("Add Advertisement");
+        NewAdButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NewAdButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -251,6 +256,13 @@ public class Moderator extends javax.swing.JFrame {
         NewJFrame back = new NewJFrame(db);
         back.setVisible(true);
     }//GEN-LAST:event_logoutButtonActionPerformed
+
+    private void NewAdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewAdButtonActionPerformed
+    AddAdForm add = new AddAdForm();
+    add.setVisible(true);
+    
+            // TODO add your handling code here:
+    }//GEN-LAST:event_NewAdButtonActionPerformed
 private void fillModAds (JTable jtable){
         
         ArrayList<Ad> list = db.getPendingAds();

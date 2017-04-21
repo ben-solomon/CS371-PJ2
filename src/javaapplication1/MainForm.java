@@ -255,6 +255,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         });
 
         addAdvButton.setText("Add Advertisement");
+        addAdvButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAdvButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -335,6 +340,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     private void periodDDLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_periodDDLActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_periodDDLActionPerformed
+
+    private void addAdvButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAdvButtonActionPerformed
+    AddAdForm add = new AddAdForm();
+    add.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_addAdvButtonActionPerformed
     
     /**
      * @param args the command line arguments
