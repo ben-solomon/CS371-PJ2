@@ -9,6 +9,10 @@ import javax.swing.table.DefaultTableModel;
 public class MainForm extends javax.swing.JFrame {
 private DBHandler db;
 String currentUser;
+/* Shouldn't thse next three arrays be in the DBhandler class?
+    They are also living in the Moderator Frame
+*/
+
 String[] categories = {"All","Cars and Trucks","Electronics","Housing","Child Care"};
 String[] periods ={"All","3 Months","6 Months","12 Months"};
 String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created By","Moderated By","Category"};
@@ -255,6 +259,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         });
 
         addAdvButton.setText("Add Advertisement");
+        addAdvButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addAdvButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -335,6 +344,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     private void periodDDLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_periodDDLActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_periodDDLActionPerformed
+
+    private void addAdvButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAdvButtonActionPerformed
+    AddAdForm add = new AddAdForm();
+    add.setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_addAdvButtonActionPerformed
     
     /**
      * @param args the command line arguments

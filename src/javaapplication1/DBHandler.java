@@ -107,7 +107,7 @@ public ArrayList<Ad> getPendingAds(){
       try {
           ArrayList<Ad> allAds = new ArrayList();
           Statement query = st;
-          String sql = "SELECT * FROM advertisements WHERE Status_ID='PN'";
+          String sql = "SELECT * FROM advertisements WHERE Status_ID='PN' AND Moderator_ID=NULL";
           ResultSet rs = query.executeQuery(sql);
           while(rs.next()){
               Ad temp = new Ad();
@@ -121,7 +121,24 @@ public ArrayList<Ad> getPendingAds(){
       }
       return null;
 }
-
+public ArrayList<Ad> getMyModAds(String user){
+      try {
+          ArrayList<Ad> myAds = new ArrayList();
+          Statement query = st;
+          String sql = "SELECT * FROM advertisements WHERE Moderator_ID='"+ user +"'";
+          ResultSet rs = query.executeQuery(sql);
+          while(rs.next()){
+              Ad temp = new Ad();
+              temp.setAll(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9));
+               myAds.add(temp);
+          }
+          return myAds;
+          
+      } catch (SQLException ex) {
+          Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return null;
+}
 
 // Method to get ads based on time and category selected
    public ArrayList<Ad> getCustomAds(String period,String category){
