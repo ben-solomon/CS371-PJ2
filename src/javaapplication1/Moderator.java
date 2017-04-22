@@ -5,12 +5,14 @@
  */
 package javaapplication1;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -273,6 +275,13 @@ public class Moderator extends javax.swing.JFrame {
     }//GEN-LAST:event_NewAdButtonActionPerformed
     private void gobuttonActionPerformed(java.awt.event.ActionEvent evt) {
         String text=this.searchTextField.getText();
+        if ("".equals(text)) {
+            Component frame = null;
+            //custom title, error icon
+        JOptionPane.showMessageDialog(frame,"Search string cannot be empty","Error", 
+                JOptionPane.ERROR_MESSAGE);
+        return;
+        }
         ArrayList<Ad> result=db.searchUnclaimed(text);
        unclaimedAds.setModel(new DefaultTableModel(arrayToAd(result),col));
         
