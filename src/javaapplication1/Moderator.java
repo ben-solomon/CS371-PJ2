@@ -33,7 +33,7 @@ public class Moderator extends javax.swing.JFrame {
         DefaultComboBoxModel perDCB = new DefaultComboBoxModel(periods);
         categoryDDL.setModel(catDCB);
         periodDDL.setModel(perDCB);
-        // updates ads when user changes drop down list 
+        // updates ads when user changes drop down list
         categoryDDL.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -58,8 +58,8 @@ public class Moderator extends javax.swing.JFrame {
                         break;
                     default:
                         unclaimedAds.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds(period,"All")),col));
-                       
-                        
+
+
                 }
                 //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
@@ -253,12 +253,7 @@ public class Moderator extends javax.swing.JFrame {
                 logoutButtonActionPerformed(evt);
             }
         });
-
-<<<<<<< HEAD
-=======
         claimAdButton.setText("Claim Ad");
-
->>>>>>> origin/master
         NewAdButton.setText("Add Advertisement");
         NewAdButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -305,16 +300,16 @@ public class Moderator extends javax.swing.JFrame {
     private void NewAdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewAdButtonActionPerformed
     AddAdForm add = new AddAdForm();
     add.setVisible(true);
-    
+
             // TODO add your handling code here:
     }//GEN-LAST:event_NewAdButtonActionPerformed
 private void fillModAds (JTable jtable){
-        
+
         ArrayList<Ad> list = db.getPendingAds();
         unclaimedAds.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
 private void fillMyAds (JTable jtable, String user){
-        
+
         ArrayList<Ad> list = db.getMyModAds(user);
         myAds.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
@@ -344,7 +339,7 @@ private void fillMyAds (JTable jtable, String user){
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
