@@ -9,6 +9,10 @@ import javax.swing.table.DefaultTableModel;
 public class MainForm extends javax.swing.JFrame {
 private DBHandler db;
 String currentUser;
+/* Shouldn't thse next three arrays be in the DBhandler class?
+    They are also living in the Moderator Frame
+*/
+
 String[] categories = {"All","Cars and Trucks","Electronics","Housing","Child Care"};
 String[] periods ={"All","3 Months","6 Months","12 Months"};
 String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created By","Moderated By","Category"};
