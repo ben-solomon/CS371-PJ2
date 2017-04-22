@@ -283,6 +283,13 @@ public class Moderator extends javax.swing.JFrame {
         return;
         }
         ArrayList<Ad> result=db.searchUnclaimed(text);
+        if (result.isEmpty()){
+            Component frame = null;
+        JOptionPane.showMessageDialog(frame,"Search returned no results","Error", 
+                JOptionPane.ERROR_MESSAGE);
+        return;    
+        }
+                
        unclaimedAds.setModel(new DefaultTableModel(arrayToAd(result),col));
         
     }
