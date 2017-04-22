@@ -231,7 +231,7 @@ public ArrayList<Ad> searchUnclaimed(String text){
      ArrayList<Ad> result=new ArrayList();
      PreparedStatement stmt = null;
 
-     String query = "select Advertisement_ID,AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID FROM Advertisements WHERE AdvTitle LIKE ? OR AdvDetails LIKE ? AND Moderator_ID = NULL";
+     String query = "select Advertisement_ID,AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID FROM Advertisements WHERE (AdvTitle LIKE ? OR AdvDetails LIKE ?) AND Status_ID = 'PN'";
      try {
             stmt=dbc.prepareStatement(query);
             stmt.setString(1,"%"+text+"%"); //binding the parameter with the given string
