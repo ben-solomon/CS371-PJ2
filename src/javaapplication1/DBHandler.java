@@ -194,11 +194,44 @@ public ArrayList<Ad> getMyModAds(String user){
       return null;
    }
 
-public ArrayList<Ad> search(String text){
+public ArrayList<Ad> searchAll(String text){
      ArrayList<Ad> result=new ArrayList();
      PreparedStatement stmt = null;
 
      String query = "select Advertisement_ID,AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID FROM Advertisements WHERE AdvTitle LIKE ? OR AdvDetails LIKE ?";
+     try {
+            stmt=dbc.prepareStatement(query);
+            stmt.setString(1,"%"+text+"%"); //binding the parameter with the given string
+            stmt.setString(2,"%"+text+"%"); 
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                int Advertisement_ID=rs.getInt("Advertisement_ID");
+                String AdvTitle =rs.getString("AdvTitle");
+                String AdvDetails =rs.getString("AdvDetails");
+                String AdvDateTime =rs.getString("AdvDateTime");
+                String Price =rs.getString("Price");
+                String User_ID =rs.getString("User_ID");
+                String Moderator_ID =rs.getString("Moderator_ID");
+                String Category_ID =rs.getString("Category_ID");
+                String Status_ID =rs.getString("Status_ID");
+                Ad searchresult=new Ad();
+                searchresult.setAll(Advertisement_ID,AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID);
+                result.add(searchresult);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return result;
+        }
+
+
+     
+     return result;
+    }
+public ArrayList<Ad> searchUnclaimed(String text){
+     ArrayList<Ad> result=new ArrayList();
+     PreparedStatement stmt = null;
+
+     String query = "select Advertisement_ID,AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID FROM Advertisements WHERE AdvTitle LIKE ? OR AdvDetails LIKE ? AND Moderator_ID = NULL";
      try {
             stmt=dbc.prepareStatement(query);
             stmt.setString(1,"%"+text+"%"); //binding the parameter with the given string

@@ -273,7 +273,7 @@ public class Moderator extends javax.swing.JFrame {
     }//GEN-LAST:event_NewAdButtonActionPerformed
     private void gobuttonActionPerformed(java.awt.event.ActionEvent evt) {
         String text=this.searchTextField.getText();
-        ArrayList<Ad> result=db.search(text);
+        ArrayList<Ad> result=db.searchUnclaimed(text);
        unclaimedAds.setModel(new DefaultTableModel(arrayToAd(result),col));
         
     }
