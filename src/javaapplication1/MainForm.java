@@ -346,7 +346,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     }//GEN-LAST:event_periodDDLActionPerformed
 
     private void addAdvButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAdvButtonActionPerformed
-    AddAdForm add = new AddAdForm();
+    AddAdForm add = new AddAdForm(db, currentUser);
     add.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_addAdvButtonActionPerformed
     

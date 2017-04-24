@@ -261,19 +261,19 @@ public ArrayList<Ad> searchUnclaimed(String text){
      return result;
     }
 
-public boolean addAdvertisement(String AdvTitle, String AdvDetails, String AdvDateTime, Double Price, String User_ID, String Moderator_ID, String Category_ID, String Status_ID) {
+public boolean addAdvertisement(String AdvTitle, String AdvDetails, String AdvDateTime, String Price, String User_ID, String Category_ID, String Status_ID) {
     
  PreparedStatement stmt = null;
 
-     String query = "INSERT INTO Advertisements(AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID) VALUES (?,?,?,?,?,?,?,?)";
+     String query = "INSERT INTO Advertisements(AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID) VALUES (?,?,?,?,?,?,?)";
      try {  
             stmt=dbc.prepareStatement(query);
             stmt.setString(1,AdvTitle); //binding the parameter with the given string
             stmt.setString(2,AdvDetails);
             stmt.setString(3,AdvDateTime);
-            stmt.setDouble(4,Price);
+            stmt.setString(4,Price);
             stmt.setString(5,User_ID);
-            stmt.setString(6,Moderator_ID);
+            stmt.setString(6,"NULL");
             stmt.setString(7,Category_ID);
             stmt.setString(8,Status_ID);
             stmt.executeUpdate();

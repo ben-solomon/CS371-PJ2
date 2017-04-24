@@ -302,7 +302,7 @@ public class Moderator extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void NewAdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewAdButtonActionPerformed
-    AddAdForm add = new AddAdForm();
+    AddAdForm add = new AddAdForm(db,currentUser);
     add.setVisible(true);
 
             // TODO add your handling code here:
