@@ -103,6 +103,7 @@ public class NewJFrame extends javax.swing.JFrame {
         String userName = loginTextBox.getText();
         if (userType.equals("User")){
             if(db.checkUser(userName)){
+                db.setUser(userName);
                MainForm form = new MainForm(db,userName);
                dispose();
             }

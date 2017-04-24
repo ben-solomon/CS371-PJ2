@@ -3,10 +3,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 
 public class DBHandler {
     // Initial DB Connection //
+    private String currentUser = "";
   private Connection dbc = null;
   private Statement st = null;
   public enum period {threeMonths,sixMonths,twelveMonths,life;}
@@ -24,7 +26,7 @@ public class DBHandler {
 DBHandler(){
     try{
         Class.forName("com.mysql.jdbc.Driver");
-        dbc = DriverManager.getConnection("jdbc:mysql://localhost:3306/cs371","root","root");
+        dbc = DriverManager.getConnection("jdbc:mysql://localhost:3306/project2","root","tru$tn01");
         st = dbc.createStatement();
         System.out.println("conn. success!");
         
@@ -36,6 +38,12 @@ DBHandler(){
           
       }
   }
+public void setUser(String user){
+    this.currentUser = user;
+}
+public String getCurrentUser(){
+    return this.currentUser;
+}
   // check if user exists
   public boolean checkUser(String username){
       Statement query = st;
@@ -91,6 +99,26 @@ public ArrayList<Ad> getAllActiveAds(){
           Statement query = st;
           String sql = "SELECT * FROM advertisements WHERE Status_ID='AC'";
           ResultSet rs = query.executeQuery(sql);
+          while(rs.next()){
+              Ad temp = new Ad();
+              temp.setAll(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9));
+               allAds.add(temp);
+          }
+          return allAds;
+          
+      } catch (SQLException ex) {
+          Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return null;
+}
+public ArrayList<Ad> getAllUserActiveAds(String username){
+    PreparedStatement stmt;
+      try {
+          ArrayList<Ad> allAds = new ArrayList();
+          String sql = "SELECT * FROM advertisements WHERE User_ID=?";
+          stmt = dbc.prepareStatement(sql);
+          stmt.setString(1,username);
+          ResultSet rs = stmt.executeQuery();
           while(rs.next()){
               Ad temp = new Ad();
               temp.setAll(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9));
@@ -260,5 +288,15 @@ public ArrayList<Ad> searchUnclaimed(String text){
      
      return result;
     }
-
+public void addAd(Ad ad){
+    Statement query = st;
+    final String sql = "INSERT INTO advertisements (AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID) values('"+ad.getTitle()+"','"+ad.getDetails()+"',Now(),'"+ad.getPrice()+"','"+ this.currentUser +"',NULL,(SELECT Category_ID FROM categories WHERE CatName ='"+ad.getCategory()+"'),'PN')";
+     try {
+           query.executeUpdate(sql);
+}
+     catch (SQLException e) {
+        JOptionPane.showMessageDialog(null,"Error adding Advertisement! "+e.getMessage());
+        
+        }
+}
 }
