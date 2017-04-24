@@ -133,7 +133,8 @@ public class AddAdForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
-      db.addAdvertisement(AdvTitle.getText(), AdvDetails.getText(),this.date,Price.getText(), this.currentUser, (String) Category_ID.getSelectedItem().toString(), "PND");
+
+          db.addAdvertisement(AdvTitle.getText(), AdvDetails.getText(),this.date,Price.getText(), this.currentUser, (String) Category_ID.getSelectedItem().toString(), "PND");
     }//GEN-LAST:event_AddButtonActionPerformed
 
     /**
