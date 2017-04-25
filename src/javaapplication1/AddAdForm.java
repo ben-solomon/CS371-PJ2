@@ -61,7 +61,7 @@ public class AddAdForm extends javax.swing.JFrame {
          dispose();
             }
         });
-        
+
     }
 
     AddAdForm(DBHandler db) {
@@ -95,7 +95,6 @@ public class AddAdForm extends javax.swing.JFrame {
          dispose();
             }
         });
-  
     }
 
     private AddAdForm() {
@@ -163,7 +162,7 @@ public class AddAdForm extends javax.swing.JFrame {
 
         jLabel2.setText("Details");
 
-        Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Cars and Trucks", "Electronics", "Housing", "Child Care" }));
 
         jLabel3.setText("Category");
 
@@ -230,8 +229,8 @@ public class AddAdForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
-       
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

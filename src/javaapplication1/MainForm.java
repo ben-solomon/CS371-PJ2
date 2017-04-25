@@ -41,7 +41,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 periodDDL.setSelectedIndex(0);
             }
         });
-        // updates ads when user changes drop down list 
+        // updates ads when user changes drop down list
         categoryDDL.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -66,10 +66,10 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                         break;
                     default:
                         adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds(period,"All")),col));
-                       
-                        
+
+
                 }
-              
+
             }
         });
         periodDDL.addActionListener(new ActionListener() {
@@ -93,8 +93,35 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                         break;
                     default:
                         adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("All",category)),col));
-                       
-                        
+
+
+                }
+
+            }
+        });
+        periodDDL.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+             JComboBox<String> items = (JComboBox<String>) e.getSource();
+                String selected = (String) items.getSelectedItem();
+                String category = categoryDDL.getSelectedItem().toString();
+                switch(selected){
+                    case "All":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("All",category)),col));
+                        break;
+                    case "3 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("3 Months",category)),col));
+                        break;
+                    case "6 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("6 Months",category)),col));
+                        break;
+                    case "12 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("12 Months",category)),col));
+                        break;
+                    default:
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("All",category)),col));
+
+
                 }
             }
         });
@@ -381,12 +408,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
        return ret;
    }
     private void fillUserAds (JTable jtable){
-        
+
         ArrayList<Ad> list = db.getAllActiveAds();
         jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
     private void fillUserOwnAds (JTable jtable){
-        
         ArrayList<Ad> list = db.getAllUserActiveAds(currentUser);
         jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
@@ -420,7 +446,6 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_refreshButtonActionPerformed
-    
     /**
      * @param args the command line arguments
      */
@@ -428,7 +453,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
