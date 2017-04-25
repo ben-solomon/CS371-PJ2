@@ -5,35 +5,132 @@
  */
 package javaapplication1;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author jayhixson
  */
 public class AddAdForm extends javax.swing.JFrame {
-    private DBHandler db;
-    private String currentUser;
-    public String[] categories = {"All","Cars and Trucks","Electronics","Housing","Child Care"};
-    private String date;
-    
+    String[] categories = {"Cars and Trucks","Electronics","Housing","Child Care"};
+    String[] periods ={"All","3 Months","6 Months","12 Months"};
+    String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created By","Moderated By","Category"};
+    public DBHandler dbx;
+    public String currentUser;
     /**
      * Creates new form AddAdForm
+     * @param username
+     * @param db
      */
-    public AddAdForm(DBHandler db,String currentUser) {
+    public AddAdForm(String username, DBHandler db) {
+        this.dbx = db;
+        this.currentUser = username;
         initComponents();
-        this.db = db;
-        this.currentUser = currentUser;
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        this.date = dateFormat.format(date);
-        
-        
+        DefaultComboBoxModel DCB = new DefaultComboBoxModel(categories);
+        Category.setModel(DCB);
+        jButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               Ad toAd = new Ad();
+       if(!title.getText().equals("")){
+           toAd.setTitle(title.getText());
+       }
+       else{
+           JOptionPane.showMessageDialog(null,"Title can't be blank!");
+       }
+       if(!Details.getText().equals("")){
+           toAd.setDetails(Details.getText());
+       }
+       else{
+             JOptionPane.showMessageDialog(null,"Details can't be blank!");
+       }
+       if(!Price.getText().equals("")){
+           toAd.setPrice(Price.getText());
+       }
+       else{
+        JOptionPane.showMessageDialog(null,"Price can't be blank!");
+        }
+       toAd.setCategory(Category.getSelectedItem().toString());
+       dbx.addAd(toAd);
+         dispose();
+            }
+        });
+
     }
+
+    AddAdForm(DBHandler db) {
+        initComponents();
+        DefaultComboBoxModel DCB = new DefaultComboBoxModel(categories);
+        Category.setModel(DCB);
+        jButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               Ad toAd = new Ad();
+       if(!title.getText().equals("")){
+           toAd.setTitle(title.getText());
+       }
+       else{
+           JOptionPane.showMessageDialog(null,"Title can't be blank!");
+       }
+       if(!Details.getText().equals("")){
+           toAd.setDetails(Details.getText());
+       }
+       else{
+             JOptionPane.showMessageDialog(null,"Details can't be blank!");
+       }
+       if(!Price.getText().equals("")){
+           toAd.setPrice(Price.getText());
+       }
+       else{
+        JOptionPane.showMessageDialog(null,"Price can't be blank!");
+        }
+       toAd.setCategory(Category.getSelectedItem().toString());
+       dbx.addAd(toAd);
+         dispose();
+            }
+        });
+
+    }
+
     private AddAdForm() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        initComponents();
+        this.dbx =null;
+        this.currentUser = "";
+        DefaultComboBoxModel DCB = new DefaultComboBoxModel(categories);
+        Category.setModel(DCB);
+        jButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               Ad toAd = new Ad();
+       if(!title.getText().equals("")){
+           toAd.setTitle(title.getText());
+       }
+       else{
+           JOptionPane.showMessageDialog(null,"Title can't be blank!");
+       }
+       if(!Details.getText().equals("")){
+           toAd.setDetails(Details.getText());
+       }
+       else{
+             JOptionPane.showMessageDialog(null,"Details can't be blank!");
+       }
+       if(!Price.getText().equals("")){
+           toAd.setPrice(Price.getText());
+       }
+       else{
+        JOptionPane.showMessageDialog(null,"Price can't be blank!");
+        }
+       toAd.setCategory((String) Category.getSelectedItem());
+       dbx.addAd(toAd);
+       dispose();
+            }
+        });
     }
 
     /**
@@ -72,10 +169,10 @@ public class AddAdForm extends javax.swing.JFrame {
 
         jLabel4.setText("Price");
 
-        AddButton.setText("Add Advertisement");
-        AddButton.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("Add Advertisement");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddButtonActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -133,44 +230,13 @@ public class AddAdForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
-
-          db.addAdvertisement(AdvTitle.getText(), AdvDetails.getText(),this.date,Price.getText(), this.currentUser, (String) Category_ID.getSelectedItem().toString(), "PND");
+      db.addAdvertisement(AdvTitle.getText(), AdvDetails.getText(),this.date,Price.getText(), this.currentUser, (String) Category_ID.getSelectedItem().toString(), "PND");
     }//GEN-LAST:event_AddButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddAdForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddAdForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddAdForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddAdForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                //new AddAdForm().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddButton;

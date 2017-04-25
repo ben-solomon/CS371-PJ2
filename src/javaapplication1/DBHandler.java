@@ -3,10 +3,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 
 public class DBHandler {
     // Initial DB Connection //
+    private String currentUser = "";
   private Connection dbc = null;
   private Statement st = null;
   public enum period {threeMonths,sixMonths,twelveMonths,life;}
@@ -24,30 +26,36 @@ public class DBHandler {
 DBHandler(){
     try{
         Class.forName("com.mysql.jdbc.Driver");
-        dbc = DriverManager.getConnection("jdbc:mysql://localhost:3306/cs371","root","root");
+        dbc = DriverManager.getConnection("jdbc:mysql://localhost:3306/project2","root","tru$tn01");
         st = dbc.createStatement();
         System.out.println("conn. success!");
-        
+
     } catch(SQLException e){
         System.out.println("conn. failed general");
     } catch (ClassNotFoundException ex) {
           Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
           System.out.println("conn. failed");
-          
+
       }
   }
+public void setUser(String user){
+    this.currentUser = user;
+}
+public String getCurrentUser(){
+    return this.currentUser;
+}
   // check if user exists
   public boolean checkUser(String username){
       Statement query = st;
       if (!username.contains(" ")){
           try {
-              String sql = "SELECT * FROM users WHERE User_ID='"+ username +"'"; 
+              String sql = "SELECT * FROM users WHERE User_ID='"+ username +"'";
               ResultSet rs = query.executeQuery(sql);
               return rs.next();
           } catch (SQLException ex) {
               Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
           }
- 
+
   }
       return false;
   }
@@ -56,13 +64,13 @@ DBHandler(){
      Statement query = st;
       if (!moderator.contains(" ")){
           try {
-              String sql = "SELECT * FROM moderators WHERE User_ID='"+ moderator +"'"; 
+              String sql = "SELECT * FROM moderators WHERE User_ID='"+ moderator +"'";
               ResultSet rs = query.executeQuery(sql);
               return rs.next();
           } catch (SQLException ex) {
               Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
           }
- 
+
   }
       return false;
   }
@@ -79,7 +87,7 @@ public ArrayList<Ad> getAllAds(){
                allAds.add(temp);
           }
           return allAds;
-          
+
       } catch (SQLException ex) {
           Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -97,7 +105,27 @@ public ArrayList<Ad> getAllActiveAds(){
                allAds.add(temp);
           }
           return allAds;
-          
+
+      } catch (SQLException ex) {
+          Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return null;
+}
+public ArrayList<Ad> getAllUserActiveAds(String username){
+    PreparedStatement stmt;
+      try {
+          ArrayList<Ad> allAds = new ArrayList();
+          String sql = "SELECT * FROM advertisements WHERE User_ID=?";
+          stmt = dbc.prepareStatement(sql);
+          stmt.setString(1,username);
+          ResultSet rs = stmt.executeQuery();
+          while(rs.next()){
+              Ad temp = new Ad();
+              temp.setAll(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9));
+               allAds.add(temp);
+          }
+          return allAds;
+
       } catch (SQLException ex) {
           Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -115,7 +143,7 @@ public ArrayList<Ad> getPendingAds(){
                allAds.add(temp);
           }
           return allAds;
-          
+
       } catch (SQLException ex) {
           Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -133,7 +161,7 @@ public ArrayList<Ad> getMyModAds(String user){
                myAds.add(temp);
           }
           return myAds;
-          
+
       } catch (SQLException ex) {
           Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -156,7 +184,7 @@ public ArrayList<Ad> getMyModAds(String user){
               case "Housing":
                   sql += " AND Category_ID = 'HOU'";
                   break;
-               
+
               case "Electronics":
                   sql += " AND Category_ID = 'ELC'";
                   break;
@@ -174,20 +202,20 @@ public ArrayList<Ad> getMyModAds(String user){
                   break;
               case "12 Months":
                   sql += " AND AdvDateTime > DATE_SUB(DATE(now()), INTERVAL 12 MONTH)";
-                  break;            
+                  break;
               case "All":
                   break;
-              default:                 
+              default:
                   break;
           }
-          ResultSet rs = query.executeQuery(sql);         
+          ResultSet rs = query.executeQuery(sql);
           while(rs.next()){
               Ad temp = new Ad();
               temp.setAll(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9));
                allCustomAds.add(temp);
           }
           return allCustomAds;
-          
+
       } catch (SQLException ex) {
           Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -202,7 +230,7 @@ public ArrayList<Ad> searchAll(String text){
      try {
             stmt=dbc.prepareStatement(query);
             stmt.setString(1,"%"+text+"%"); //binding the parameter with the given string
-            stmt.setString(2,"%"+text+"%"); 
+            stmt.setString(2,"%"+text+"%");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 int Advertisement_ID=rs.getInt("Advertisement_ID");
@@ -224,7 +252,7 @@ public ArrayList<Ad> searchAll(String text){
         }
 
 
-     
+
      return result;
     }
 public ArrayList<Ad> searchUnclaimed(String text){
@@ -235,7 +263,7 @@ public ArrayList<Ad> searchUnclaimed(String text){
      try {
             stmt=dbc.prepareStatement(query);
             stmt.setString(1,"%"+text+"%"); //binding the parameter with the given string
-            stmt.setString(2,"%"+text+"%"); 
+            stmt.setString(2,"%"+text+"%");
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
                 int Advertisement_ID=rs.getInt("Advertisement_ID");
@@ -257,31 +285,18 @@ public ArrayList<Ad> searchUnclaimed(String text){
         }
 
 
-     
+
      return result;
     }
-
-public boolean addAdvertisement(String AdvTitle, String AdvDetails, String AdvDateTime, String Price, String User_ID, String Category_ID, String Status_ID) {
-    
- PreparedStatement stmt = null;
-
-     String query = "INSERT INTO Advertisements(AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID) VALUES (?,?,?,?,?,?,?)";
-     try {  
-            stmt=dbc.prepareStatement(query);
-            stmt.setString(1,AdvTitle); //binding the parameter with the given string
-            stmt.setString(2,AdvDetails);
-            stmt.setString(3,AdvDateTime);
-            stmt.setString(4,Price);
-            stmt.setString(5,User_ID);
-            stmt.setString(6,"NULL");
-            stmt.setString(7,Category_ID);
-            stmt.setString(8,Status_ID);
-            stmt.executeUpdate();
-            return true;
-     } catch (SQLException e) {
-            System.out.println(e.getMessage());
-            return false;
-     }        
+public void addAd(Ad ad){
+    Statement query = st;
+    final String sql = "INSERT INTO advertisements (AdvTitle,AdvDetails,AdvDateTime,Price,User_ID,Moderator_ID,Category_ID,Status_ID) values('"+ad.getTitle()+"','"+ad.getDetails()+"',Now(),'"+ad.getPrice()+"','"+ this.currentUser +"',NULL,(SELECT Category_ID FROM categories WHERE CatName ='"+ad.getCategory()+"'),'PN')";
+     try {
+           query.executeUpdate(sql);
 }
+     catch (SQLException e) {
+        JOptionPane.showMessageDialog(null,"Error adding Advertisement! "+e.getMessage());
 
+        }
+}
 }

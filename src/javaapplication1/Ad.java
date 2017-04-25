@@ -76,16 +76,6 @@ public class Ad {
         return this.adStatus;
     }
     public String getCategory(){
-       if (this.adCategory == null ? ELECTRONICS == null : this.adCategory.equals(ELECTRONICS)){
-           return "Electronics";
-       }else if (this.adCategory == null ? CHILDCARE == null : this.adCategory.equals(CHILDCARE)){
-           return "Child Care";
-       }
-       else if(this.adCategory == null ? HOUSING == null : this.adCategory.equals(HOUSING)){
-           return"Housing";
-       }else if (this.adCategory == null ? CARTRUCKS == null : this.adCategory.equals(CARTRUCKS)){
-           return "Cars and Trucks";
-       }
-       else{return "Error";}   
+      return this.adCategory;
 }
 }

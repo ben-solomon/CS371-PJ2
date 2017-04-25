@@ -223,9 +223,9 @@ public class Moderator extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addComponent(approve_button)
-                .addGap(29, 29, 29)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(140, 140, 140))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
 
         jTabbedPane1.addTab("My Advertisements", jPanel2);
@@ -275,12 +275,12 @@ public class Moderator extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
      /*class SelectionListener implements ListSelectionListener {
-        
+
         @Override
         public void valueChanged(ListSelectionEvent e) {
         Component frame = null;
         int row = unclaimedAds.getSelectedRow();
-        int col = unclaimedAds.getSelectedColumn();  
+        int col = unclaimedAds.getSelectedColumn();
         if(row>=0 && col>=0){
             Object o=unclaimedAds.getValueAt(row, col);
             JOptionPane.showMessageDialog(frame,"Claimed","Error",
@@ -294,7 +294,7 @@ public class Moderator extends javax.swing.JFrame {
         }
     }
     */
-    
+
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         dispose();
         NewJFrame back = new NewJFrame(db);
@@ -302,7 +302,7 @@ public class Moderator extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void NewAdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewAdButtonActionPerformed
-    AddAdForm add = new AddAdForm(db,currentUser);
+    AddAdForm add = new AddAdForm(currentUser,db);
     add.setVisible(true);
 
             // TODO add your handling code here:
@@ -317,20 +317,20 @@ public class Moderator extends javax.swing.JFrame {
         if ("".equals(text)) {
             Component frame = null;
             //custom title, error icon
-        JOptionPane.showMessageDialog(frame,"Search string cannot be empty","Error", 
+        JOptionPane.showMessageDialog(frame,"Search string cannot be empty","Error",
                 JOptionPane.ERROR_MESSAGE);
         return;
         }
         ArrayList<Ad> result=db.searchUnclaimed(text);
         if (result.isEmpty()){
             Component frame = null;
-        JOptionPane.showMessageDialog(frame,"Search returned no results","Error", 
+        JOptionPane.showMessageDialog(frame,"Search returned no results","Error",
                 JOptionPane.ERROR_MESSAGE);
-        return;    
+        return;
         }
-                
+
        unclaimedAds.setModel(new DefaultTableModel(arrayToAd(result),col));
-        
+
     }
     private void fillModAds (JTable jtable){
 

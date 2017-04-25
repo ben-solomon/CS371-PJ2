@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javafx.scene.control.TabPane;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -19,17 +20,28 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
 
     public MainForm(DBHandler db,String user) {
         this.db=db;
+
         this.currentUser = user;
 
         initComponents();
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         fillUserAds(adsTable);
+        fillUserOwnAds(myAdsTable);
         DefaultComboBoxModel catDCB = new DefaultComboBoxModel(categories);
         DefaultComboBoxModel perDCB = new DefaultComboBoxModel(periods);
         categoryDDL.setModel(catDCB);
         periodDDL.setModel(perDCB);
-        // updates ads when user changes drop down list 
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fillUserAds(adsTable);
+                fillUserOwnAds(myAdsTable);
+                categoryDDL.setSelectedIndex(0);
+                periodDDL.setSelectedIndex(0);
+            }
+        });
+        // updates ads when user changes drop down list
         categoryDDL.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,10 +66,36 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                         break;
                     default:
                         adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds(period,"All")),col));
-                       
-                        
+
+
                 }
-                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+            }
+        });
+        periodDDL.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+             JComboBox<String> items = (JComboBox<String>) e.getSource();
+                String selected = (String) items.getSelectedItem();
+                String category = categoryDDL.getSelectedItem().toString();
+                switch(selected){
+                    case "All":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("All",category)),col));
+                        break;
+                    case "3 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("3 Months",category)),col));
+                        break;
+                    case "6 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("6 Months",category)),col));
+                        break;
+                    case "12 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("12 Months",category)),col));
+                        break;
+                    default:
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("All",category)),col));
+
+
+                }
             }
         });
     }
@@ -84,6 +122,8 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         editButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
         addAdvButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        refreshButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -178,7 +218,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
 
         TabPane.addTab("Advertisements", jPanel1);
 
-        deleteButton.setText("Delete");
+        deleteButton.setText("Delete Ad");
         deleteButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteButtonActionPerformed(evt);
@@ -198,7 +238,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         ));
         jScrollPane3.setViewportView(myAdsTable);
 
-        editButton.setText("Edit");
+        editButton.setText("Save Changes");
         editButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 editButtonActionPerformed(evt);
@@ -265,6 +305,15 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
             }
         });
 
+        jButton1.setText("jButton1");
+
+        refreshButton.setText("Refresh Data");
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -278,8 +327,15 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(logoutButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(refreshButton)
+                        .addGap(18, 18, 18)
                         .addComponent(addAdvButton, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20))))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jButton1)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,10 +343,16 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(logoutButton)
-                    .addComponent(addAdvButton))
+                    .addComponent(addAdvButton)
+                    .addComponent(refreshButton))
                 .addGap(16, 16, 16)
                 .addComponent(TabPane)
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jButton1)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         pack();
@@ -319,9 +381,14 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
        return ret;
    }
     private void fillUserAds (JTable jtable){
-        
+
         ArrayList<Ad> list = db.getAllActiveAds();
-        adsTable.setModel(new DefaultTableModel(arrayToAd(list),col));
+        jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
+    }
+    private void fillUserOwnAds (JTable jtable){
+
+        ArrayList<Ad> list = db.getAllUserActiveAds(currentUser);
+        jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
@@ -346,10 +413,15 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     }//GEN-LAST:event_periodDDLActionPerformed
 
     private void addAdvButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAdvButtonActionPerformed
-    AddAdForm add = new AddAdForm(db, currentUser);
+
+    AddAdForm add = new AddAdForm(currentUser,db);
     add.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_addAdvButtonActionPerformed
-    
+
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_refreshButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -357,7 +429,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -391,6 +463,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     private javax.swing.JComboBox<String> categoryDDL;
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton editButton;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -402,6 +475,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     private javax.swing.JButton logoutButton;
     private javax.swing.JTable myAdsTable;
     private javax.swing.JComboBox<String> periodDDL;
+    private javax.swing.JButton refreshButton;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchTextField;
     // End of variables declaration//GEN-END:variables
