@@ -92,7 +92,6 @@ public class Moderator extends javax.swing.JFrame {
         myAds = new javax.swing.JTable();
         approve_button = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
-        NewAdButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -237,13 +236,6 @@ public class Moderator extends javax.swing.JFrame {
             }
         });
 
-        NewAdButton.setText("Add Advertisement");
-        NewAdButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                NewAdButtonActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -256,16 +248,12 @@ public class Moderator extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(logoutButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(NewAdButton)
-                        .addGap(28, 28, 28))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(logoutButton)
-                    .addComponent(NewAdButton))
+                .addComponent(logoutButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -300,13 +288,6 @@ public class Moderator extends javax.swing.JFrame {
         NewJFrame back = new NewJFrame(db);
         back.setVisible(true);
     }//GEN-LAST:event_logoutButtonActionPerformed
-
-    private void NewAdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NewAdButtonActionPerformed
-    AddAdForm add = new AddAdForm(currentUser,db);
-    add.setVisible(true);
-
-            // TODO add your handling code here:
-    }//GEN-LAST:event_NewAdButtonActionPerformed
 
     private void showAll_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showAll_ButtonActionPerformed
       ArrayList<Ad> list = db.getPendingAds();
@@ -396,7 +377,6 @@ private void fillMyAds (JTable jtable, String user){
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton NewAdButton;
     private javax.swing.JButton approve_button;
     private javax.swing.JComboBox<String> categoryDDL;
     private javax.swing.JButton claimAdButton;
