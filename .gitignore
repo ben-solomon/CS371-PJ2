@@ -1,13 +1,12 @@
-<<<<<<< HEAD
-/dist/
 *.class
 
-build/classes/javaapplication1/AddAdForm.class
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
 
-*.form
+# Package Files #
+*.jar
+*.war
+*.ear
 
-build/classes/javaapplication1/AddAdForm.form
-=======
-/dist/
->>>>>>> ben-solomon/master
-/build/
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
