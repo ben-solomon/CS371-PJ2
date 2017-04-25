@@ -41,7 +41,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 periodDDL.setSelectedIndex(0);
             }
         });
+<<<<<<< HEAD
         // updates ads when user changes drop down list
+=======
+        // updates ads when user changes drop down list 
+>>>>>>> ben-solomon/master
         categoryDDL.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -96,6 +100,36 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
 
 
                 }
+<<<<<<< HEAD
+=======
+              
+            }
+        });
+        periodDDL.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+             JComboBox<String> items = (JComboBox<String>) e.getSource();
+                String selected = (String) items.getSelectedItem();
+                String category = categoryDDL.getSelectedItem().toString();
+                switch(selected){
+                    case "All":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("All",category)),col));
+                        break;
+                    case "3 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("3 Months",category)),col));
+                        break;
+                    case "6 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("6 Months",category)),col));
+                        break;
+                    case "12 Months":
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("12 Months",category)),col));
+                        break;
+                    default:
+                        adsTable.setModel(new DefaultTableModel(arrayToAd(db.getCustomAds("All",category)),col));
+                       
+                        
+                }
+>>>>>>> ben-solomon/master
             }
         });
     }
@@ -386,7 +420,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
     private void fillUserOwnAds (JTable jtable){
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> ben-solomon/master
         ArrayList<Ad> list = db.getAllUserActiveAds(currentUser);
         jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
@@ -413,7 +451,10 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     }//GEN-LAST:event_periodDDLActionPerformed
 
     private void addAdvButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addAdvButtonActionPerformed
+<<<<<<< HEAD
 
+=======
+>>>>>>> ben-solomon/master
     AddAdForm add = new AddAdForm(currentUser,db);
     add.setVisible(true);        // TODO add your handling code here:
     }//GEN-LAST:event_addAdvButtonActionPerformed
@@ -421,7 +462,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_refreshButtonActionPerformed
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> ben-solomon/master
     /**
      * @param args the command line arguments
      */

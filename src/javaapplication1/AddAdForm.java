@@ -61,7 +61,11 @@ public class AddAdForm extends javax.swing.JFrame {
          dispose();
             }
         });
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> ben-solomon/master
     }
 
     AddAdForm(DBHandler db) {
@@ -95,7 +99,11 @@ public class AddAdForm extends javax.swing.JFrame {
          dispose();
             }
         });
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> ben-solomon/master
     }
 
     private AddAdForm() {
@@ -229,9 +237,16 @@ public class AddAdForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
     private void AddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddButtonActionPerformed
       db.addAdvertisement(AdvTitle.getText(), AdvDetails.getText(),this.date,Price.getText(), this.currentUser, (String) Category_ID.getSelectedItem().toString(), "PND");
     }//GEN-LAST:event_AddButtonActionPerformed
+=======
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+       
+       
+    }//GEN-LAST:event_jButton1ActionPerformed
+>>>>>>> ben-solomon/master
 
     /**
      * @param args the command line arguments

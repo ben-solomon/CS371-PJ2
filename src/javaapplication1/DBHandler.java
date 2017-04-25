@@ -131,6 +131,26 @@ public ArrayList<Ad> getAllUserActiveAds(String username){
       }
       return null;
 }
+public ArrayList<Ad> getAllUserActiveAds(String username){
+    PreparedStatement stmt;
+      try {
+          ArrayList<Ad> allAds = new ArrayList();
+          String sql = "SELECT * FROM advertisements WHERE User_ID=?";
+          stmt = dbc.prepareStatement(sql);
+          stmt.setString(1,username);
+          ResultSet rs = stmt.executeQuery();
+          while(rs.next()){
+              Ad temp = new Ad();
+              temp.setAll(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7),rs.getString(8),rs.getString(9));
+               allAds.add(temp);
+          }
+          return allAds;
+          
+      } catch (SQLException ex) {
+          Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      return null;
+}
 public ArrayList<Ad> getPendingAds(){
       try {
           ArrayList<Ad> allAds = new ArrayList();
@@ -296,7 +316,11 @@ public void addAd(Ad ad){
 }
      catch (SQLException e) {
         JOptionPane.showMessageDialog(null,"Error adding Advertisement! "+e.getMessage());
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> ben-solomon/master
         }
 }
 }

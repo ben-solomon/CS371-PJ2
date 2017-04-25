@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /dist/
 *.class
 
@@ -6,3 +7,6 @@ build/classes/javaapplication1/AddAdForm.class
 *.form
 
 build/classes/javaapplication1/AddAdForm.form
+=======
+/dist/
+>>>>>>> ben-solomon/master
