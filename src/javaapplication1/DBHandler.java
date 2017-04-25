@@ -145,7 +145,7 @@ public ArrayList<Ad> getAllUserActiveAds(String username){
                allAds.add(temp);
           }
           return allAds;
-          
+
       } catch (SQLException ex) {
           Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -316,11 +316,6 @@ public void addAd(Ad ad){
 }
      catch (SQLException e) {
         JOptionPane.showMessageDialog(null,"Error adding Advertisement! "+e.getMessage());
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> ben-solomon/master
         }
 }
 }
