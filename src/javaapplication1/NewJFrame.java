@@ -5,6 +5,9 @@
  */
 package javaapplication1;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 /**
  *
@@ -107,12 +110,22 @@ public class NewJFrame extends javax.swing.JFrame {
                MainForm form = new MainForm(db,userName);
                dispose();
             }
+            else{
+               JOptionPane.showMessageDialog(rootPane, "Invalid username!");
+            }
             
         }
         else{
             if(db.checkModerator(userName)){
-            Moderator form = new Moderator(db,userName);
+                try {
+                    Moderator form = new Moderator(db,userName);
+                } catch (SQLException ex) {
+                    Logger.getLogger(NewJFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             dispose();
+            }
+            else{
+                JOptionPane.showMessageDialog(rootPane, "Invalid username!");
             }
             
         }

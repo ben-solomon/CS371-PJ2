@@ -8,139 +8,74 @@ package javaapplication1;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
+import javax.swing.JFrame;
 
 /**
  *
- * @author jayhixson
+ * @author Ben
  */
-public class AddAdForm extends javax.swing.JFrame {
-    public DBHandler dbx;
-    private MainForm f;
-    public String currentUser;
-    private String[] categories;
-    String[] periods ={"All","3 Months","6 Months","12 Months"};
-    String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created By","Moderated By","Category"};
-    
+public class UpdateAdForm extends javax.swing.JFrame {
+    private DBHandler db;
+    private String username;
+    private Ad ad;
+   private String[] categories;
     /**
-     * Creates new form AddAdForm
-     * @param username
+     * Creates new form UpdateAdForm
      * @param db
+     * @param username
+     * @param ad
      */
-    public AddAdForm(String username, DBHandler db) {
-        this.dbx = db;
-        this.currentUser = username;
-
-        initComponents();
+    public UpdateAdForm(DBHandler db,String username,Ad ad) {
+           
+        this.db=db;
+        this.username=username;
+        this.ad=ad;
+         HashMap catmap2 = db.getCatMap2();
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         try {
             this.categories=db.getCategories();
         } catch (SQLException ex) {
-            Logger.getLogger(AddAdForm.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UpdateAdForm.class.getName()).log(Level.SEVERE, null, ex);
         }
+        HashMap<String,String> catMap =db.getCatMap();
+        initComponents(); 
         DefaultComboBoxModel DCB = new DefaultComboBoxModel(categories);
         Category.setModel(DCB);
-        jButton1.addActionListener(new ActionListener() {
+        title.setText(this.ad.getTitle());
+        Details.setText(this.ad.getDetails());
+        Price.setText(this.ad.getPrice());
+        for(int i=0;i<Category.getModel().getSize();i++){
+            String Catname = catMap.get(this.ad.getCategory());
+            String listitem =Category.getModel().getElementAt(i);
+            if(listitem.equals(Catname)){
+                Category.setSelectedIndex(i);
+            }
+        }
+     updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               Ad toAd = new Ad();
-       if(!title.getText().equals("")){
-           toAd.setTitle(title.getText());
-       }
-       else{
-           JOptionPane.showMessageDialog(null,"Title can't be blank!");
-       }
-       if(!Details.getText().equals("")){
-           toAd.setDetails(Details.getText());
-       }
-       else{
-             JOptionPane.showMessageDialog(null,"Details can't be blank!");
-       }
-       if(!Price.getText().equals("")){
-           toAd.setPrice(Price.getText());
-       }
-       else{
-        JOptionPane.showMessageDialog(null,"Price can't be blank!");
-        }
-       toAd.setCategory(Category.getSelectedItem().toString());
-       dbx.addAd(toAd);
-         dispose();
+                Ad update = new Ad();
+                update.setTitle(title.getText());
+                update.setDetails(Details.getText());
+                update.setPrice(Price.getText());
+                update.setCategory((String) catmap2.get(Category.getSelectedItem()));
+                update.setID(ad.getID());
+                update.setModerator(ad.getModerator());
+                update.setUser(ad.getUser());
+                db.updateAd(update);
+                dispose();
             }
-        });
-        
+        });   
     }
 
-    AddAdForm(DBHandler db) {
-        initComponents();
-        DefaultComboBoxModel DCB = new DefaultComboBoxModel(categories);
-        Category.setModel(DCB);
-        jButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               Ad toAd = new Ad();
-       if(!title.getText().equals("")){
-           toAd.setTitle(title.getText());
-       }
-       else{
-           JOptionPane.showMessageDialog(null,"Title can't be blank!");
-       }
-       if(!Details.getText().equals("")){
-           toAd.setDetails(Details.getText());
-       }
-       else{
-             JOptionPane.showMessageDialog(null,"Details can't be blank!");
-       }
-       if(!Price.getText().equals("")){
-           toAd.setPrice(Price.getText());
-       }
-       else{
-        JOptionPane.showMessageDialog(null,"Price can't be blank!");
-        }
-       toAd.setCategory(Category.getSelectedItem().toString());
-       dbx.addAd(toAd);
-         dispose();
-         
-            }
-        });
-  
+    private UpdateAdForm() {
     }
-
-    private AddAdForm() {
-        initComponents();
-        this.dbx =null;
-        this.currentUser = "";
-        DefaultComboBoxModel DCB = new DefaultComboBoxModel(categories);
-        Category.setModel(DCB);
-        jButton1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-               Ad toAd = new Ad();
-       if(!title.getText().equals("")){
-           toAd.setTitle(title.getText());
-       }
-       else{
-           JOptionPane.showMessageDialog(null,"Title can't be blank!");
-       }
-       if(!Details.getText().equals("")){
-           toAd.setDetails(Details.getText());
-       }
-       else{
-             JOptionPane.showMessageDialog(null,"Details can't be blank!");
-       }
-       if(!Price.getText().equals("")){
-           toAd.setPrice(Price.getText());
-       }
-       else{
-        JOptionPane.showMessageDialog(null,"Price can't be blank!");
-        }
-       toAd.setCategory((String) Category.getSelectedItem());
-       dbx.addAd(toAd);
-       dispose();
-            }
-        });
-    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -151,6 +86,9 @@ public class AddAdForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Price = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        updateButton = new javax.swing.JButton();
         title = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -158,11 +96,17 @@ public class AddAdForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         Category = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        Price = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel4.setText("Price");
+
+        updateButton.setText("Update Advertisement");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Title");
 
@@ -175,15 +119,6 @@ public class AddAdForm extends javax.swing.JFrame {
         Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel3.setText("Category");
-
-        jLabel4.setText("Price");
-
-        jButton1.setText("Add Advertisement");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -199,7 +134,7 @@ public class AddAdForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1)
+                        .addComponent(updateButton)
                         .addGap(142, 142, 142))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -231,33 +166,62 @@ public class AddAdForm extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addComponent(Price, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(updateButton)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
-       
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+
+    }//GEN-LAST:event_updateButtonActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(UpdateAdForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(UpdateAdForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(UpdateAdForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(UpdateAdForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
 
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new UpdateAdForm().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Category;
     private javax.swing.JTextArea Details;
     private javax.swing.JTextField Price;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField title;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }

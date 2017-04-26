@@ -1,9 +1,15 @@
 package javaapplication1;
+import java.awt.Point;
 import javax.swing.*;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.TabPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -14,7 +20,7 @@ String currentUser;
     They are also living in the Moderator Frame
 */
 
-String[] categories = {"All","Cars and Trucks","Electronics","Housing","Child Care"};
+private String[] categories;
 String[] periods ={"All","3 Months","6 Months","12 Months"};
 String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created By","Moderated By","Category"};
 
@@ -22,16 +28,94 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         this.db=db;
 
         this.currentUser = user;
-
+        
         initComponents();
+    try {
+        this.categories = db.getCategories();
+    } catch (SQLException ex) {
+        Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+    }
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        clearButton.setVisible(false);
+        editAdButton.setVisible(false);
         fillUserAds(adsTable);
         fillUserOwnAds(myAdsTable);
+        deleteButton.setVisible(false);
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               String id = myAdsTable.getModel().getValueAt(myAdsTable.getSelectedRow(),0).toString();
+               if(db.deleteAd(id)){
+                   JOptionPane.showMessageDialog(null,"Ad deleted succesfully");
+                   fillUserOwnAds(myAdsTable);
+               }
+            }
+        });
+        editAdButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               Ad temp = new Ad();
+               String id = myAdsTable.getModel().getValueAt(myAdsTable.getSelectedRow(),0).toString();
+               temp.setID(Integer.parseInt(id));
+               temp.setTitle(myAdsTable.getModel().getValueAt(myAdsTable.getSelectedRow(),1).toString());
+               temp.setDetails(myAdsTable.getModel().getValueAt(myAdsTable.getSelectedRow(),2).toString());
+               temp.setPrice(myAdsTable.getModel().getValueAt(myAdsTable.getSelectedRow(),4).toString());
+               temp.setCategory(myAdsTable.getModel().getValueAt(myAdsTable.getSelectedRow(),7).toString());
+               UpdateAdForm update = new UpdateAdForm(db,currentUser,temp);
+               update.setVisible(true);                    
+//db.updateAd(temp);
+               //fillUserAds(myAdsTable);
+            }
+        });
+        myAdsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                editAdButton.setVisible(true);
+                deleteButton.setVisible(true);
+            }
+        });
+        adsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        myAdsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        adsTable.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.getClickCount() > 1) {
+                adsTable.getCellEditor().stopCellEditing();
+            }
+        }
+    });
+        myAdsTable.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.getClickCount() > 1) {
+                myAdsTable.getCellEditor().stopCellEditing();
+            }
+        }
+    });
         DefaultComboBoxModel catDCB = new DefaultComboBoxModel(categories);
         DefaultComboBoxModel perDCB = new DefaultComboBoxModel(periods);
         categoryDDL.setModel(catDCB);
         periodDDL.setModel(perDCB);
+        clearButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fillUserAds(adsTable);
+                searchTextField.setText("");
+                clearButton.setVisible(false);
+            }
+        });
+        searchButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String text = (String) searchTextField.getText();
+                if (! text.isEmpty()){
+                    fillSearchedAds(adsTable,text);
+                    clearButton.setVisible(true);
+                    }
+                }
+            
+        });
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -39,6 +123,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 fillUserOwnAds(myAdsTable);
                 categoryDDL.setSelectedIndex(0);
                 periodDDL.setSelectedIndex(0);
+                editAdButton.setVisible(false);
             }
         });
         // updates ads when user changes drop down list 
@@ -112,17 +197,17 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         jLabel2 = new javax.swing.JLabel();
         searchTextField = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        clearButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
         adsTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         deleteButton = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
+        editAdButton = new javax.swing.JButton();
+        jScrollPane6 = new javax.swing.JScrollPane();
         myAdsTable = new javax.swing.JTable();
-        editButton = new javax.swing.JButton();
         logoutButton = new javax.swing.JButton();
         addAdvButton = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
         refreshButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -154,6 +239,8 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
             }
         });
 
+        clearButton.setText("Clear");
+
         adsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -165,7 +252,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(adsTable);
+        jScrollPane1.setViewportView(adsTable);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -174,7 +261,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3)
@@ -183,13 +270,15 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(periodDDL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 435, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(searchButton)))))
+                                .addComponent(searchButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(clearButton)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -210,10 +299,11 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(searchTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchButton))))
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                            .addComponent(searchButton)
+                            .addComponent(clearButton))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         TabPane.addTab("Advertisements", jPanel1);
@@ -224,6 +314,8 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 deleteButtonActionPerformed(evt);
             }
         });
+
+        editAdButton.setText("Edit Selected Ad");
 
         myAdsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -236,57 +328,47 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane3.setViewportView(myAdsTable);
-
-        editButton.setText("Save Changes");
-        editButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                editButtonActionPerformed(evt);
-            }
-        });
+        jScrollPane6.setViewportView(myAdsTable);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(editButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(deleteButton)
-                .addGap(43, 43, 43))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane6)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(editAdButton)
+                        .addGap(674, 674, 674)
+                        .addComponent(deleteButton)
+                        .addGap(0, 1, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(editButton)
+                    .addComponent(editAdButton)
                     .addComponent(deleteButton))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE))
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 885, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 322, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 304, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         TabPane.addTab("My Advertisements", jPanel2);
@@ -304,8 +386,6 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 addAdvButtonActionPerformed(evt);
             }
         });
-
-        jButton1.setText("jButton1");
 
         refreshButton.setText("Refresh Data");
         refreshButton.addActionListener(new java.awt.event.ActionListener() {
@@ -331,11 +411,6 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                         .addGap(18, 18, 18)
                         .addComponent(addAdvButton, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20))))
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jButton1)
-                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,14 +420,9 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                     .addComponent(logoutButton)
                     .addComponent(addAdvButton)
                     .addComponent(refreshButton))
-                .addGap(16, 16, 16)
-                .addComponent(TabPane)
-                .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jButton1)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addComponent(TabPane, javax.swing.GroupLayout.PREFERRED_SIZE, 354, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
 
         pack();
@@ -380,23 +450,25 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
        }
        return ret;
    }
-    private void fillUserAds (JTable jtable){
+    public void fillUserAds (JTable jtable){
         
         ArrayList<Ad> list = db.getAllActiveAds();
         jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
-    private void fillUserOwnAds (JTable jtable){
+    public void fillUserOwnAds (JTable jtable){
         
         ArrayList<Ad> list = db.getAllUserActiveAds(currentUser);
         jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
     }
+        private void fillSearchedAds (JTable jtable, String text){
+        
+        ArrayList<Ad> list = db.searchAllActive(text);
+        jtable.setModel(new DefaultTableModel(arrayToAd(list),col));
+    }
+    
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_deleteButtonActionPerformed
-
-    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_editButtonActionPerformed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         dispose();
@@ -454,25 +526,26 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
             }
         });
     }
+ 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabPane;
     private javax.swing.JButton addAdvButton;
-    private javax.swing.JTable adsTable;
+    public javax.swing.JTable adsTable;
     private javax.swing.JComboBox<String> categoryDDL;
+    private javax.swing.JButton clearButton;
     private javax.swing.JButton deleteButton;
-    private javax.swing.JButton editButton;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton editAdButton;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JButton logoutButton;
-    private javax.swing.JTable myAdsTable;
+    public javax.swing.JTable myAdsTable;
     private javax.swing.JComboBox<String> periodDDL;
     private javax.swing.JButton refreshButton;
     private javax.swing.JButton searchButton;

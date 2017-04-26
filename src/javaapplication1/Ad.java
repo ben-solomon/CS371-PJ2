@@ -24,6 +24,10 @@ public class Ad {
     public void setAll(int id, String title, String detail, String date, String price, String user, String mod, String category,String status){
         this.adID = id;this.adTitle=title;this.adDetails=detail;this.adDate = date;this.adPrice=price;this.adUser=user;this.adMod=mod;this.adCategory=category;adStatus=status;
     }
+    public void setID(int id){
+        this.adID = id;
+    }
+
     public void setTitle(String title){
         this.adTitle = title;
     }
