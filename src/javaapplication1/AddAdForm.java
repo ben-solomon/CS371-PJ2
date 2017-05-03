@@ -30,11 +30,13 @@ public class AddAdForm extends javax.swing.JFrame {
      * @param username
      * @param db
      */
+    // pass user and db conn to new form
     public AddAdForm(String username, DBHandler db) {
         this.dbx = db;
         this.currentUser = username;
 
         initComponents();
+        // fill dropdowns with categories from db
         try {
             this.categories=db.getCategories();
         } catch (SQLException ex) {
@@ -136,6 +138,7 @@ public class AddAdForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null,"Price can't be blank!");
         }
        toAd.setCategory((String) Category.getSelectedItem());
+       // after checking fields for null values, the ad is added to the DB
        dbx.addAd(toAd);
        dispose();
             }
