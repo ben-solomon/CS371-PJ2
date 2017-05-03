@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-
+// class to handle db methods (SQL commands)
 public class DBHandler {
     // Initial DB Connection //
     private String currentUser = "";
@@ -25,9 +25,10 @@ public class DBHandler {
   private period PERIOD;
   private category CATEGORY;
 DBHandler(){
+    // DB name, username and password must be updated to connect
     try{
         Class.forName("com.mysql.jdbc.Driver");
-        dbc = DriverManager.getConnection("jdbc:mysql://localhost:3306/project2","root","tru$tn01");
+        dbc = DriverManager.getConnection("jdbc:mysql://localhost:3306/databaseName","userName","password");
         st = dbc.createStatement();
         System.out.println("conn. success!");
         
@@ -94,6 +95,7 @@ public ArrayList<Ad> getAllAds(){
       }
       return null;
 }
+  //get all active ads in db
 public ArrayList<Ad> getAllActiveAds(){
       try {
           ArrayList<Ad> allAds = new ArrayList();
@@ -112,6 +114,7 @@ public ArrayList<Ad> getAllActiveAds(){
       }
       return null;
 }
+    // get all users ads (AC or PN)
 public ArrayList<Ad> getAllUserActiveAds(String username){
     PreparedStatement stmt;
       try {
@@ -132,6 +135,7 @@ public ArrayList<Ad> getAllUserActiveAds(String username){
       }
       return null;
 }
+    //get all pending ads from db
 public ArrayList<Ad> getPendingAds(){
       try {
           ArrayList<Ad> allAds = new ArrayList();
@@ -150,6 +154,7 @@ public ArrayList<Ad> getPendingAds(){
       }
       return null;
 }
+    //get ads moderated by given user
 public ArrayList<Ad> getMyModAds(String user){
       try {
           ArrayList<Ad> myAds = new ArrayList();
@@ -222,6 +227,7 @@ public ArrayList<Ad> getMyModAds(String user){
       }
       return null;
    }
+    // get ads based on category/period that are pending
     public ArrayList<Ad> getCustomModAds(String period,String category){
        try {
           ArrayList<Ad> allCustomAds = new ArrayList();
@@ -274,7 +280,7 @@ public ArrayList<Ad> getMyModAds(String user){
       }
       return null;
    }
-
+// search title or details
 public ArrayList<Ad> searchAll(String text){
      ArrayList<Ad> result=new ArrayList();
      PreparedStatement stmt = null;
@@ -308,6 +314,7 @@ public ArrayList<Ad> searchAll(String text){
      
      return result;
     }
+    // search title of details of penging ads
 public ArrayList<Ad> searchUnclaimed(String text){
      ArrayList<Ad> result=new ArrayList();
      PreparedStatement stmt = null;
@@ -369,6 +376,7 @@ public void updateAd(Ad ad){
         
         }
 }
+    // search title and details of active ads
 public ArrayList<Ad> searchAllActive(String text){
      ArrayList<Ad> result=new ArrayList();
      PreparedStatement stmt = null;
@@ -402,6 +410,7 @@ public ArrayList<Ad> searchAllActive(String text){
      
      return result;
     }
+    // get category ID from category name
 public String getCatID(String catID) throws SQLException{
     Statement stmt = st;
     final String sql = "SELECT (Category_ID) FROM categories WHERE CatName='"+catID+"'";
@@ -420,6 +429,7 @@ public String getCatID(String catID) throws SQLException{
         }
         return null;
 }
+    // get category name from ID
 public String getCatName(String catID) throws SQLException{
     PreparedStatement stmt = null;
     final String sql = "SELECT CatName FROM categories WHERE Category_ID=?";
@@ -439,6 +449,7 @@ public String getCatName(String catID) throws SQLException{
         }
         return null;
 }
+    // returns a hasmap of categories and IDs
 public HashMap<String,String> getCatMap(){
     HashMap<String,String> catmap = new HashMap();
      Statement stmt = st;
@@ -456,6 +467,8 @@ public HashMap<String,String> getCatMap(){
       }   
      return catmap;
 }
+    
+    // key val flipped
 public HashMap<String,String> getCatMap2(){
     HashMap<String,String> catmap = new HashMap();
      Statement stmt = st;
@@ -473,6 +486,7 @@ public HashMap<String,String> getCatMap2(){
       }   
      return catmap;
 }
+    // set moderator for ads
 public void claimAds(int[] AdIDs, String user){
   
           Statement query = st;
@@ -485,6 +499,7 @@ public void claimAds(int[] AdIDs, String user){
               }
           }
 }
+   
 public boolean deleteAd(String id){
     Statement query = st;
     String sql = "DELETE FROM Advertisements WHERE Advertisement_ID ='"+id+"'";
@@ -517,6 +532,7 @@ Statement query = st;
               }
           }
 }
+    // get string array of category names
 public String[] getCategories() throws SQLException{
      ArrayList<String> temp = new ArrayList();
      Statement stmt = st;
