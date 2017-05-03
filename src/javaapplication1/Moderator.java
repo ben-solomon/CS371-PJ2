@@ -36,6 +36,7 @@ public class Moderator extends javax.swing.JFrame {
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         fillModAds(unclaimedAds);
         fillMyAds(myAds, currentUser);
+        // moderator can select multiple ads to approve/dissaprove/claim
         disapproveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,6 +70,7 @@ public class Moderator extends javax.swing.JFrame {
             }
             
         });
+        // refresh ads
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -76,6 +78,7 @@ public class Moderator extends javax.swing.JFrame {
         fillMyAds(myAds, currentUser);
             }
         });
+        // disable double clicl/ cell editing
         myAds.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -92,6 +95,7 @@ public class Moderator extends javax.swing.JFrame {
             }
         }
     });
+        //fill dropdown boxes
         DefaultComboBoxModel catDCB = new DefaultComboBoxModel(categories);
         DefaultComboBoxModel perDCB = new DefaultComboBoxModel(periods);
         clearSearch.addActionListener(new ActionListener() {
