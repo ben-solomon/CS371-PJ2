@@ -35,6 +35,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
     } catch (SQLException ex) {
         Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
     }
+        // set buttons invisible until user action
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         clearButton.setVisible(false);
@@ -42,6 +43,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
         fillUserAds(adsTable);
         fillUserOwnAds(myAdsTable);
         deleteButton.setVisible(false);
+        // delete button, visible on row click
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -52,6 +54,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                }
             }
         });
+        //edit button, visible on row click
         editAdButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -64,8 +67,6 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                temp.setCategory(myAdsTable.getModel().getValueAt(myAdsTable.getSelectedRow(),7).toString());
                UpdateAdForm update = new UpdateAdForm(db,currentUser,temp);
                update.setVisible(true);                    
-//db.updateAd(temp);
-               //fillUserAds(myAdsTable);
             }
         });
         myAdsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -75,8 +76,10 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 deleteButton.setVisible(true);
             }
         });
+        // users can only select one ad at a time to edit
         adsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         myAdsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        // disable cell editing in tables - edit form used instead
         adsTable.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
@@ -93,6 +96,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
             }
         }
     });
+        //create and fill dropdown boxes
         DefaultComboBoxModel catDCB = new DefaultComboBoxModel(categories);
         DefaultComboBoxModel perDCB = new DefaultComboBoxModel(periods);
         categoryDDL.setModel(catDCB);
@@ -126,7 +130,7 @@ String[] col = new String[] {"ID","Ad Title","Details","Date","Price","Created B
                 editAdButton.setVisible(false);
             }
         });
-        // updates ads when user changes drop down list 
+        // updates ads when user changes drop down list selection
         categoryDDL.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
