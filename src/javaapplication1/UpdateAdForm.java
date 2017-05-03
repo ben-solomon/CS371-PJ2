@@ -29,6 +29,7 @@ public class UpdateAdForm extends javax.swing.JFrame {
      * @param username
      * @param ad
      */
+    // pass in database, username, and ad object from selected row
     public UpdateAdForm(DBHandler db,String username,Ad ad) {
            
         this.db=db;
@@ -46,9 +47,11 @@ public class UpdateAdForm extends javax.swing.JFrame {
         initComponents(); 
         DefaultComboBoxModel DCB = new DefaultComboBoxModel(categories);
         Category.setModel(DCB);
+        // fill edit form fields with current ad data
         title.setText(this.ad.getTitle());
         Details.setText(this.ad.getDetails());
         Price.setText(this.ad.getPrice());
+        // check which category dropdown item needs to be pre-selected (convert ID to name)
         for(int i=0;i<Category.getModel().getSize();i++){
             String Catname = catMap.get(this.ad.getCategory());
             String listitem =Category.getModel().getElementAt(i);
@@ -56,6 +59,7 @@ public class UpdateAdForm extends javax.swing.JFrame {
                 Category.setSelectedIndex(i);
             }
         }
+        // overwrite changes on update button clicked
      updateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,6 +71,7 @@ public class UpdateAdForm extends javax.swing.JFrame {
                 update.setID(ad.getID());
                 update.setModerator(ad.getModerator());
                 update.setUser(ad.getUser());
+                // status is set to pending again for moderator to approve changes (updateAd() )
                 db.updateAd(update);
                 dispose();
             }
