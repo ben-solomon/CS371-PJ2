@@ -13,6 +13,7 @@ import javax.swing.*;
  *
  * @author Ben
  */
+// main login page
 public class NewJFrame extends javax.swing.JFrame {
     private DBHandler db;
     //private JFrame frame = new JFrame("Login");
@@ -100,7 +101,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+// checks if user or moderator is selected in dropdown and if username is valid for selection
     private void LoginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginButtonActionPerformed
         String userType = loginDropDown.getSelectedItem().toString();
         String userName = loginTextBox.getText();
